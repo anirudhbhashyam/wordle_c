@@ -7,6 +7,9 @@ A Wordle implementation in `c` using the terminal.
 ./pack.sh run
 ```
 
+# Dependencies 
+    - `gcc`
+
 # TODO
     - Docker integration.
     - CI.
