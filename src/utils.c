@@ -12,19 +12,19 @@ int16_t char_position(const char* word, char c)
 
 void print_colorcoded_char(const char c, COLOR_CODE cc)
 {
-    const char* start_color =  "\033[0;";
-    const char* end_color =  "\033[0m";
+    const char* start_ansi =  "\033[0;";
+    const char* end_ansi =  "\033[0m";
 
     switch (cc)
     {
         case WHITE:
-            printf("%s100m%c%s ", start_color, c, end_color);
+            printf("%s100m%c%s ", start_ansi, c, end_ansi);
             break;
         case GREEN:
-            printf("%s42m%c%s ", start_color, c, end_color);
+            printf("%s42m%c%s ", start_ansi, c, end_ansi);
             break;
         case YELLOW:
-            printf("%s43m%c%s ", start_color, c, end_color);
+            printf("%s43m%c%s ", start_ansi, c, end_ansi);
             break;
         default:
             printf("%c ", c);
