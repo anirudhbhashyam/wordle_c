@@ -1,0 +1,15 @@
+name: build
+on: [push]
+
+jobs:
+    check-build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: actions/checkout@v2
+            - name: gcc-setup
+                uses: egor-tensin/setup-gcc@v1
+                with:
+                    version: latest
+                    platform: x64
+            - name: compile
+                run: ./pack.sh build
