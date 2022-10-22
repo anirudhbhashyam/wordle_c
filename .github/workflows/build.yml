@@ -21,4 +21,4 @@ jobs:
           platform: x64
       
       - name: compile
-          run: ./pack.sh build
+          run: bash ./pack.sh build
