@@ -75,6 +75,9 @@ function build() {
     printf "INFO \t Linking objects...\n"
     link_objects "${OBJECTS}"
 
+    printf "INFO \t Copying executable to project directory...\n"
+    cp ${EXECUTABLE} ../
+
     printf "INFO \t Successfully built.\n"
 
     cd ".."
@@ -87,9 +90,7 @@ function run() {
     printf "\n\n" 
     printf "STARTING GAME\n\n"
 
-    cd ${BUILD_DIR}
     ./${EXECUTABLE}
-    cd ".."
 
     printf "\nINFO \t cleaning...\n"
     clean
