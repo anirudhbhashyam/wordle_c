@@ -14,4 +14,3 @@ A Wordle implementation in `c` using the terminal.
 
 # TODO
     - Docker integration.
-    - CI.
