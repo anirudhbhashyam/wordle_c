@@ -1,9 +1,9 @@
 FROM gcc:latest
 
-WORKDIR /app
+COPY . /usr/app
 
-COPY . /app
+WORKDIR /usr/app
 
 RUN ./pack.sh build
 
-CMD ["./build/app"]
+CMD [ "./app" ]
