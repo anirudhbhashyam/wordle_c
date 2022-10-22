@@ -99,8 +99,6 @@ const char* get_random_word()
 {
     FILE* f = fopen(WORD_LIST_PATH, "r");
 
-    print("Opening file: %s\n", WORD_LIST_PATH);
-
     if (f == NULL) 
     {
         printf("Error opening file.\n");
