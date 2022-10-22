@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up GCC
         uses: egor-tensin/setup-gcc@v1
@@ -21,4 +21,4 @@ jobs:
           platform: x64
       
       - name: compile
-          run: bash ./pack.sh "build"
+        run: ./pack.sh "build"
