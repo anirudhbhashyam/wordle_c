@@ -11,9 +11,9 @@
 #define WORD_LENGTH 5
 #define WORD_SIZE sizeof(char) * (WORD_LENGTH + 1)
 
-static u_int8_t positions_found[WORD_LENGTH] = { 0, 0, 0, 0, 0 };
-static u_int8_t letters_found[WORD_LENGTH] = { 0, 0, 0, 0, 0 };
-static u_int16_t color_codes[WORD_LENGTH] = { 0, 0, 0, 0, 0 };
+static uint8_t positions_found[WORD_LENGTH] = { 0, 0, 0, 0, 0 };
+static uint8_t letters_found[WORD_LENGTH] = { 0, 0, 0, 0, 0 };
+static uint16_t color_codes[WORD_LENGTH] = { 0, 0, 0, 0, 0 };
 
 void run();
 void letters_found_logic(const char*, const char*);

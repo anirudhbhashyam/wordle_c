@@ -2,7 +2,7 @@
 
 int16_t char_position(const char* word, char c)
 {
-    u_int16_t i;
+    uint16_t i;
     for (i = 0; i < strlen(word); i++)
     {
         if (c == word[i]) return i;

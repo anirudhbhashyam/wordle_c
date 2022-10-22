@@ -7,8 +7,8 @@ void run()
     // const char* word = "manoc";
     printf("Read the random word: %s\n", word);
 
-    u_int8_t running = 1;
-    u_int16_t tries = 1;
+    uint8_t running = 1;
+    uint16_t tries = 1;
 
     while (running) 
     {
@@ -50,7 +50,7 @@ void letters_found_logic(const char* target, const char* guess)
 {
     // If the guess is not correct, then check if any characters
     // in the guess occur in the target word.
-    u_int16_t i;
+    uint16_t i;
     for (i = 0; i < strlen(guess); i++)
     {
         if (char_position(target, guess[i]) >= 0)
@@ -62,7 +62,7 @@ void letters_found_logic(const char* target, const char* guess)
 
 void positions_found_logic(const char* target, const char* guess)
 {
-    u_int16_t i;
+    uint16_t i;
     for (i = 0; i < strlen(guess); i++)
     {
         if (target[i] == guess[i])
@@ -74,7 +74,7 @@ void positions_found_logic(const char* target, const char* guess)
 
 void color_code_logic()
 {
-    u_int16_t i;
+    uint16_t i;
     for (i = 0; i < WORD_LENGTH; i++)
     {
         if (letters_found[i] == 1) 
@@ -99,9 +99,11 @@ const char* get_random_word()
 {
     FILE* f = fopen(WORD_LIST_PATH, "r");
 
+    print("Opening file: %s\n", WORD_LIST_PATH);
+
     if (f == NULL) 
     {
-        printf("Error opening file");
+        printf("Error opening file.\n");
         exit(-1);
     }
 
