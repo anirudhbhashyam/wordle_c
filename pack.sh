@@ -37,6 +37,9 @@ function make_dir() {
 
 function clean() {
     rm -rf ${BUILD_DIR}
+    if [[ -f ${EXECUTABLE} ]]; then
+        rm ${EXECUTABLE}
+    fi
 }
 
 function make_objects() {
@@ -92,7 +95,7 @@ function run() {
 
     ./${EXECUTABLE}
 
-    printf "\nINFO \t cleaning...\n"
+    printf "\nINFO \t exiting.\n"
     clean
 }
 
