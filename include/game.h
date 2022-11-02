@@ -6,7 +6,7 @@
 
 #include "utils.h"
 
-#define WORD_LIST_PATH "../res/words.txt"
+#define WORD_LIST_PATH "./res/words.txt"
 
 #define WORD_LENGTH 5
 #define WORD_SIZE sizeof(char) * (WORD_LENGTH + 1)
