@@ -5,7 +5,7 @@ void run()
     srand(time(NULL) * getpid());
     const char* word = get_random_word();
     // const char* word = "manoc";
-    printf("Read the random word: %s\n", word);
+    // printf("Read the random word: %s\n", word);
 
     uint8_t running = 1;
     uint16_t tries = 1;
