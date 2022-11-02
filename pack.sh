@@ -87,7 +87,6 @@ function build() {
 }
 
 function run() {
-    # Check if current directory is the build directory.
     build
     
     printf "\n\n" 
