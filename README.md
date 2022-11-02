@@ -6,18 +6,20 @@ A Wordle implementation in `c` using the terminal.
 
 # Usage 
 ```
->>> ./pack.sh run
+>>> git clone https:\\github.com\anirudhbhashyam\wordle_c
+>>> cd wordle_c
 ```
-or 
+## With `gcc`
+
 ```
 >>> bash pack.sh run
 ```
 
-# Docker Run
+## With `Docker`
 ```
 >>> docker build -t wordle .
 >>> docker run --rm -it wordle
 ```
 
 # Dependencies 
-    - `gcc`
+    - gcc
