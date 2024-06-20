@@ -1,3 +1,5 @@
+#include <ctype.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,6 +21,6 @@ void run();
 void letters_found_logic(const char*, const char*);
 void positions_found_logic(const char*, const char*);
 void color_code_logic();
-const char* read_user_input();
+char* read_user_input();
 const char* get_random_word();
 void print_characters(const char*);

@@ -4,32 +4,30 @@ void run()
 {
     srand(time(NULL) * getpid());
     const char* word = get_random_word();
-    // const char* word = "manoc";
-    // printf("Read the random word: %s\n", word);
+    char* input = malloc(sizeof(char) * (WORD_LENGTH + 1));
 
     uint8_t running = 1;
     uint16_t tries = 1;
 
     while (running) 
     {
-        const char* input = read_user_input();
-
-        if (tries >= 5)
-        {
-            printf("Game over.");
-            free((char*) input);
-            exit(0);
-        }
+        read_user_input(input);
 
         if (input == NULL)
         {
             continue;
         }
 
+        if (tries >= 5)
+        {
+            printf("Game over.\n");
+            printf("The word was: %s\n", word);
+            exit(0);
+        }
+
         if (strcmp(input, word) == 0) 
         {
             printf("You guessed the word correctly!\n");
-            free((char*) input);
             exit(0);
         } 
         else 
@@ -42,8 +40,10 @@ void run()
         print_characters(input);
 
         tries++;
-        printf("############################################\n");
+        // printf("############################################\n");
     }
+    free(input);
+    free((char*) word);
 }
 
 void letters_found_logic(const char* target, const char* guess) 
@@ -82,9 +82,8 @@ void color_code_logic()
     }
 }
 
-const char* read_user_input()
+char* read_user_input(char* input)
 {
-    char* input = malloc(sizeof(char) * (WORD_LENGTH + 1));
     printf("Guess the word: ");
     scanf("%s", input);
     if (strlen(input) < WORD_LENGTH) 
@@ -92,42 +91,55 @@ const char* read_user_input()
         printf("Input word is too short!\n");
         return NULL;
     }
+    if (strlen(input) > WORD_LENGTH)
+    {
+        printf("Input word is too long!\n");
+        return NULL;
+    }
+    for (size_t i = 0; i < strlen(input); ++i)
+    {
+        if (!isalpha(input[i]))
+            return NULL;
+    }
     return input;
 }
 
+// Caller owns the memory!
 const char* get_random_word()
 {
     FILE* f = fopen(WORD_LIST_PATH, "r");
 
     if (f == NULL) 
     {
-        printf("Error opening file.\n");
+        fprintf(stderr, "Error opening file %s: %s", WORD_LIST_PATH, strerror(errno));
         exit(-1);
     }
 
-    char* word = malloc(WORD_SIZE);
+    char word[WORD_SIZE] = { 0 };
     size_t n_words = 0;
 
-    while (fgets(word, sizeof(word), f))
+    while (fgets(word, ARRAY_LEN(word), f))
     {
         n_words++;
     }
 
-    char** words = (char**) malloc(sizeof(char*) * n_words);
-
     rewind(f);
+
+    char** words = malloc(sizeof(char*) * n_words);
 
     for (size_t i = 0; i < n_words; i++)
     {
-        words[i] = (char*) malloc(WORD_SIZE);
+        words[i] = malloc(WORD_SIZE);
         fgets(words[i], sizeof(words[i]), f);
     }
 
-    fclose(f);
+    if (fclose(f) != 0) {
+        fprintf(stderr, "Error closing file %s: %s", WORD_LIST_PATH, strerror(errno));
+    }
 
     size_t random_index = rand() % n_words;
 
-    char* random_word = (char*) malloc(WORD_SIZE);
+    char* random_word = malloc(WORD_SIZE);
     memcpy(random_word, words[random_index], WORD_SIZE);
 
     for (size_t i = 0; i < n_words; i++)
@@ -135,7 +147,6 @@ const char* get_random_word()
         free(words[i]);
     }
     free(words);
-    free(word);
 
     random_word[strcspn(random_word, "\n")] = 0;
 
