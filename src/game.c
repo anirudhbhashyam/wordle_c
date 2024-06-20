@@ -1,10 +1,15 @@
 #include "game.h"
 
+uint8_t positions_found[WORD_LENGTH] = { 0 };
+uint8_t letters_found[WORD_LENGTH] = { 0 };
+uint16_t color_codes[WORD_LENGTH] = { 0 };
+
 void run() 
 {
     srand(time(NULL) * getpid());
-    const char* word = get_random_word();
-    char* input = malloc(sizeof(char) * (WORD_LENGTH + 1));
+    char* word = malloc(WORD_SIZE);
+    get_random_word(word);
+    char* input = malloc(WORD_SIZE);
 
     uint8_t running = 1;
     uint16_t tries = 1;
@@ -13,16 +18,16 @@ void run()
     {
         read_user_input(input);
 
-        if (input == NULL)
-        {
-            continue;
-        }
-
         if (tries >= 5)
         {
             printf("Game over.\n");
             printf("The word was: %s\n", word);
             exit(0);
+        }
+
+        if (input == NULL)
+        {
+            continue;
         }
 
         if (strcmp(input, word) == 0) 
@@ -40,7 +45,6 @@ void run()
         print_characters(input);
 
         tries++;
-        // printf("############################################\n");
     }
     free(input);
     free((char*) word);
@@ -48,10 +52,7 @@ void run()
 
 void letters_found_logic(const char* target, const char* guess) 
 {
-    // If the guess is not correct, then check if any characters
-    // in the guess occur in the target word.
-    uint16_t i;
-    for (i = 0; i < strlen(guess); i++)
+    for (size_t i = 0; i < strlen(guess); ++i)
     {
         if (char_position(target, guess[i]) >= 0)
         {
@@ -62,8 +63,7 @@ void letters_found_logic(const char* target, const char* guess)
 
 void positions_found_logic(const char* target, const char* guess)
 {
-    uint16_t i;
-    for (i = 0; i < strlen(guess); i++)
+    for (size_t i = 0; i < strlen(guess); ++i)
     {
         if (target[i] == guess[i])
         {
@@ -75,7 +75,7 @@ void positions_found_logic(const char* target, const char* guess)
 void color_code_logic()
 {
     uint16_t i;
-    for (i = 0; i < WORD_LENGTH; i++)
+    for (i = 0; i < WORD_LENGTH; ++i)
     {
         if (letters_found[i] == 1) 
             color_codes[i] = (positions_found[i] == 1) ? GREEN : YELLOW;
@@ -104,8 +104,7 @@ char* read_user_input(char* input)
     return input;
 }
 
-// Caller owns the memory!
-const char* get_random_word()
+const char* get_random_word(char* random_word)
 {
     FILE* f = fopen(WORD_LIST_PATH, "r");
 
@@ -127,7 +126,7 @@ const char* get_random_word()
 
     char** words = malloc(sizeof(char*) * n_words);
 
-    for (size_t i = 0; i < n_words; i++)
+    for (size_t i = 0; i < n_words; ++i)
     {
         words[i] = malloc(WORD_SIZE);
         fgets(words[i], sizeof(words[i]), f);
@@ -139,10 +138,9 @@ const char* get_random_word()
 
     size_t random_index = rand() % n_words;
 
-    char* random_word = malloc(WORD_SIZE);
     memcpy(random_word, words[random_index], WORD_SIZE);
 
-    for (size_t i = 0; i < n_words; i++)
+    for (size_t i = 0; i < n_words; ++i)
     {
         free(words[i]);
     }
@@ -155,8 +153,7 @@ const char* get_random_word()
 
 void print_characters(const char* characters) 
 {
-    size_t i;
-    for (i = 0; i < strlen(characters); i++) 
+    for (size_t i = 0; i < strlen(characters); ++i)
     {
         print_colorcoded_char(characters[i], color_codes[i]);
     }
