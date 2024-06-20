@@ -1,3 +1,6 @@
+#ifndef UTILS_H
+#define UTILS_H
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -14,3 +17,5 @@ typedef enum
 
 int16_t char_position(const char*, char);
 void print_colorcoded_char(const char, COLOR_CODE);
+
+#endif // UTILS_H
