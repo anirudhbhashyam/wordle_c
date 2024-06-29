@@ -1,5 +1,5 @@
 #!/bin/bash 
-CC="gcc"
+CC="clang"
 SRC="src"
 OBJ="obj"
 INC="include"
@@ -54,14 +54,15 @@ function link_objects() {
 }
 
 function build() {
-    printf "INFO \t Checking directories...\n"
+    printf "INFO \t Using compiler ${CC}\n"
+    printf "INFO \t Checking directories.\n"
     check_dir ${SRC}
     check_dir ${INC}
 
-    printf "INFO \t Cleaning...\n"
+    printf "INFO \t Cleaning.\n"
     clean
 
-    printf "INFO \t Creating build directory...\n"
+    printf "INFO \t Creating build directory.\n"
     make_dir ${BUILD_DIR}
     make_dir "${BUILD_DIR}/${OBJ}"
     copy_dir ${SRC} ${BUILD_DIR}
@@ -72,13 +73,13 @@ function build() {
     SOURCES=$(find ${SRC} -name "*.c" -type f)
     OBJECTS=$(echo ${SOURCES//$SRC/$OBJ} | sed 's/\.c/\.o/g')
 
-    printf "INFO \t Creating object files...\n"
+    printf "INFO \t Creating object files.\n"
     make_objects "${SOURCES}"
 
-    printf "INFO \t Linking objects...\n"
+    printf "INFO \t Linking objects.\n"
     link_objects "${OBJECTS}"
 
-    printf "INFO \t Copying executable to project directory...\n"
+    printf "INFO \t Copying executable to project directory.\n"
     cp ${EXECUTABLE} ../
 
     printf "INFO \t Successfully built.\n"
