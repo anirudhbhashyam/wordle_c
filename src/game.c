@@ -7,9 +7,12 @@ uint16_t color_codes[WORD_LENGTH] = { 0 };
 void run() 
 {
     srand(time(NULL) * getpid());
-    char* word = malloc(WORD_SIZE);
-    get_random_word(word);
-    char* input = malloc(WORD_SIZE);
+
+    char word[WORD_LENGTH + 1] = { 0 };
+    char input[WORD_LENGTH + 1] = { 0 };
+    get_random_word_2(WORD_LIST_PATH, word);
+
+    printf("The word is %s\n", word);
 
     uint8_t running = 1;
     uint16_t tries = 1;
@@ -25,32 +28,41 @@ void run()
             exit(0);
         }
 
-        if (input == NULL)
-        {
-            continue;
-        }
-
         if (strcmp(input, word) == 0) 
         {
             printf("You guessed the word correctly!\n");
             exit(0);
         } 
-        else 
+    
+        for (uint16_t i = 0; i < WORD_LENGTH; ++i)
         {
-            positions_found_logic(word, input);
-            letters_found_logic(word, input);
-            color_code_logic(positions_found, letters_found);
+            positions_found[i] = 0;
+            letters_found[i] = 0;
+            color_codes[i] = 0;
         }
+
+        check_positions_found(input, word);
+        check_letters_found(input, word);
+        color_code_logic(positions_found, letters_found);
+
         printf("\n");
         print_characters(input);
+        for (int32_t i = 0; i < ARRAY_LEN(letters_found); ++i)
+        {
+            printf("%d ", letters_found[i]);
+        }
+        printf("\n");
+        for (int32_t i = 0; i < ARRAY_LEN(positions_found); ++i)
+        {
+            printf("%d ", positions_found[i]);
+        }
+        printf("\n");
 
         tries++;
     }
-    free(input);
-    free((char*) word);
 }
 
-void letters_found_logic(const char* target, const char* guess) 
+void check_letters_found(const char* guess, const char* target)
 {
     for (size_t i = 0; i < strlen(guess); ++i)
     {
@@ -59,9 +71,31 @@ void letters_found_logic(const char* target, const char* guess)
             letters_found[i] = 1;
         }
     }
+#if 1
+    for (size_t i = 1; i < strlen(guess); ++i)
+    {
+        bool first_half_condition = false;
+        for (size_t k = 0; k < i; ++k) 
+        {
+            if (letters_found[k] == 1 && guess[k] == guess[i])
+                first_half_condition = true;
+        }
+
+        bool second_half_condition = false;
+        for (size_t k = i + 1; k < strlen(guess); ++k)
+        {
+            if (letters_found[k] == 1)
+                continue;
+            second_half_condition = true;
+        }
+        
+        if (first_half_condition || second_half_condition)
+            letters_found[i] = 0;
+    }
+#endif
 }
 
-void positions_found_logic(const char* target, const char* guess)
+void check_positions_found(const char* guess, const char* target)
 {
     for (size_t i = 0; i < strlen(guess); ++i)
     {
@@ -74,8 +108,7 @@ void positions_found_logic(const char* target, const char* guess)
 
 void color_code_logic()
 {
-    uint16_t i;
-    for (i = 0; i < WORD_LENGTH; ++i)
+    for (uint16_t i = 0; i < WORD_LENGTH; ++i)
     {
         if (letters_found[i] == 1) 
             color_codes[i] = (positions_found[i] == 1) ? GREEN : YELLOW;
@@ -104,52 +137,41 @@ char* read_user_input(char* input)
     return input;
 }
 
-const char* get_random_word(char* random_word)
+const char* get_random_word_2(const char* filepath, char* random_word)
 {
-    FILE* f = fopen(WORD_LIST_PATH, "r");
+    FILE* f = fopen(filepath, "r");
 
-    if (f == NULL) 
-    {
-        fprintf(stderr, "Error opening file %s: %s", WORD_LIST_PATH, strerror(errno));
-        exit(-1);
+    if (f == NULL) {
+        fprintf(stderr, "Error opening file %s: %s\n", filepath, strerror(errno));
+        exit(1);
     }
 
-    char word[WORD_SIZE] = { 0 };
+    char word_with_newline[WORD_LENGTH + 1 + 1] = { 0 };
     size_t n_words = 0;
 
-    while (fgets(word, ARRAY_LEN(word), f))
-    {
+    while (fgets(word_with_newline, ARRAY_LEN(word_with_newline), f)) {
         n_words++;
-    }
-
-    rewind(f);
-
-    char** words = malloc(sizeof(char*) * n_words);
-
-    for (size_t i = 0; i < n_words; ++i)
-    {
-        words[i] = malloc(WORD_SIZE);
-        fgets(words[i], sizeof(words[i]), f);
-    }
-
-    if (fclose(f) != 0) {
-        fprintf(stderr, "Error closing file %s: %s", WORD_LIST_PATH, strerror(errno));
     }
 
     size_t random_index = rand() % n_words;
 
-    memcpy(random_word, words[random_index], WORD_SIZE);
-
-    for (size_t i = 0; i < n_words; ++i)
+    rewind(f);
+    size_t counter = 0;
+    while(fgets(word_with_newline, ARRAY_LEN(word_with_newline), f))
     {
-        free(words[i]);
-    }
-    free(words);
+        if (counter == random_index)
+        {
+            memcpy(random_word, word_with_newline, WORD_SIZE);
+            break;
+        }
 
+        counter++;
+    }
     random_word[strcspn(random_word, "\n")] = 0;
 
     return random_word;
 }
+
 
 void print_characters(const char* characters) 
 {
