@@ -1,9 +1,8 @@
 #include "utils.h"
 
-int16_t char_position(const char* word, char c)
+int16_t char_position(const char* word, const char c)
 {
-    uint16_t i;
-    for (i = 0; i < strlen(word); i++)
+    for (size_t i = 0; i < strlen(word); i++)
     {
         if (c == word[i]) return i;
     }

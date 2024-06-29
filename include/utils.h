@@ -15,7 +15,7 @@ typedef enum
     YELLOW
 } COLOR_CODE;
 
-int16_t char_position(const char*, char);
+int16_t char_position(const char*, const char);
 void print_colorcoded_char(const char, COLOR_CODE);
 
 #endif // UTILS_H
