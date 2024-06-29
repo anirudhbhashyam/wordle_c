@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <stdbool.h>
 #include <ctype.h>
 #include <errno.h>
 #include <stdio.h>
@@ -21,11 +22,12 @@ extern uint8_t letters_found[WORD_LENGTH];
 extern uint16_t color_codes[WORD_LENGTH];
 
 void run();
-void letters_found_logic(const char*, const char*);
-void positions_found_logic(const char*, const char*);
+void check_letters_found(const char*, const char*);
+void check_positions_found(const char*, const char*);
 void color_code_logic();
 char* read_user_input(char*);
 const char* get_random_word(char*);
+const char* get_random_word_2(const char*, char*);
 void print_characters(const char*);
 
 #endif // GAME_H
